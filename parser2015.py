@@ -20,7 +20,7 @@ for filename in os.listdir(dirname):
         print ("Processing sheet: \"" + sheet.name + " : " + river + "\"")
 
         if currentRow == 0:
-            summarySheet.write(0, 0, "Rzeka")
+            summarySheet.write(0, 0, "Nazwa ppk")
             summarySheet.write(0, 1, sheet.cell(15, 8).value)
             summarySheet.write(0, 2, sheet.cell(15, 13).value)
             summarySheet.write(0, 3, sheet.cell(15, 14).value)
@@ -59,5 +59,5 @@ for filename in os.listdir(dirname):
                 summarySheet.write(currentRow, 16, sheet.cell(i, 91).value)
                 currentRow = currentRow + 1
 
-summaryWorkbook.save(os.getcwd() + "\\..\\summary.xls")
+summaryWorkbook.save(os.getcwd() + "\\..\\summary2015.xls")
 print ("Finished")
