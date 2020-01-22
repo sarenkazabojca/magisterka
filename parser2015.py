@@ -5,7 +5,6 @@ import os
 
 summaryWorkbook = xlwt.Workbook()
 summarySheet = summaryWorkbook.add_sheet('dane')
-summaryWorkbook.save('summary.xls')
 currentRow = 0
 
 dirname = os.getcwd() + "\\..\\data"
@@ -60,5 +59,5 @@ for filename in os.listdir(dirname):
                 summarySheet.write(currentRow, 16, sheet.cell(i, 91).value)
                 currentRow = currentRow + 1
 
-summaryWorkbook.save('summary.xls')
+summaryWorkbook.save(os.getcwd() + "\\..\\summary.xls")
 print ("Finished")
