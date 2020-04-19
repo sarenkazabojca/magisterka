@@ -3,17 +3,21 @@ import xlwt
 import re
 import os
 
+#tworzymy nowy plik z arkuszem o nazwie "dane"
 summaryWorkbook = xlwt.Workbook()
 summarySheet = summaryWorkbook.add_sheet('dane')
 currentRow = 0
 
+#lokalizacja danych
 dirname = os.getcwd() + "\\data\\2014"
 
+#pętla przechodząca kolejno po plikach z danymi
 for filename in os.listdir(dirname):
     path = os.path.join(dirname, filename)
     workbook = xlrd.open_workbook(path)
     print (">> Processing workbook: " + filename)
 
+#obsługa arkuszy w plikach
     for i in range(workbook.nsheets):
         sheet = workbook.sheet_by_index(i)
 
@@ -21,10 +25,11 @@ for filename in os.listdir(dirname):
         start = 0
         if firstcell is None or firstcell == "":
             start = 1
-
-        rivername = sheet.cell(start, 1).value
+#nazwa z komórki (start,1), a jeśli ta jest pusta, z komórki (start, 2)
+        rivername = sheet.cell(start, 1).value or sheet.cell(start, 2).value
         print (">> Processing sheet: \"" + sheet.name + " : " + rivername + "\" [" + str(sheet.nrows) + "]")
 
+# nadajemy nazwy kolumnom w nowym pliku
         if currentRow == 0:
             summarySheet.write(start, 0, "Nazwa ppk")
             summarySheet.write(start, 1, "Stat")
@@ -51,6 +56,8 @@ for filename in os.listdir(dirname):
             summarySheet.write(start, 22, "Fosfor ogólny (mg P/l)")
             currentRow = 1
 
+# w danych wyznaczamy komórki do spisania i przepisujemy je do pliku wyjściowego
+# dane spisujemy tylko jeśli odpowiednio dla danego wiersza w pierszej kolumnie znajduje się napis Średnia, Max lub Min
         for i in range(sheet.nrows):
             if re.search("(Średnia|Max|Min)", str(sheet.cell(i, 0).value)):
                 print ("Writing: " + str(sheet.cell(i, 0).value))
@@ -81,5 +88,6 @@ for filename in os.listdir(dirname):
             else:
                 print ("Skipping: " + str(sheet.cell(i, 0).value) + " (" + str(sheet.cell(i, 0).ctype) + ")")
 
+#zapisujemy zmiany do pliku wyjściowego
 summaryWorkbook.save(os.getcwd() + "\\summary2011-14.xls")
 print ("Finished")
