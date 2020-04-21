@@ -2,14 +2,15 @@ import xlrd
 import xlwt
 import re
 import os
+import tkinter.filedialog
 
 #tworzymy nowy plik z arkuszem o nazwie "dane"
 summaryWorkbook = xlwt.Workbook()
 summarySheet = summaryWorkbook.add_sheet('dane')
 currentRow = 0
 
-#lokalizacja danych
-dirname = os.getcwd() + "\\data\\2014"
+#lokalizacja folderu z danymi
+dirname = tkinter.filedialog.askdirectory()
 
 #pętla przechodząca kolejno po plikach z danymi
 for filename in os.listdir(dirname):
@@ -20,7 +21,7 @@ for filename in os.listdir(dirname):
 #obsługa arkuszy w plikach
     for i in range(workbook.nsheets):
         sheet = workbook.sheet_by_index(i)
-
+#obsługa pustej pierwszej komórki
         firstcell = sheet.cell(0, 0).value
         start = 0
         if firstcell is None or firstcell == "":
@@ -29,31 +30,31 @@ for filename in os.listdir(dirname):
         rivername = sheet.cell(start, 1).value or sheet.cell(start, 2).value
         print (">> Processing sheet: \"" + sheet.name + " : " + rivername + "\" [" + str(sheet.nrows) + "]")
 
-# nadajemy nazwy kolumnom w nowym pliku
+#nadajemy nazwy kolumnom w nowym pliku
         if currentRow == 0:
-            summarySheet.write(start, 0, "Nazwa ppk")
-            summarySheet.write(start, 1, "Stat")
-            summarySheet.write(start, 2, "Temperatura (oC)")
-            summarySheet.write(start, 3, "Barwa (mg/l Pt)")
-            summarySheet.write(start, 4, "Zawiesina ogólna(mg / l)")
-            summarySheet.write(start, 5, "Tlen rozpuszczony (mg O2/l)")
-            summarySheet.write(start, 6, "BZT5 (mg O2/l)")
-            summarySheet.write(start, 7, "OWO (mg C/l)")
-            summarySheet.write(start, 8, "Przewodność w 20oC (uS/cm)")
-            summarySheet.write(start, 9, "Substancje rozpuszczone (mg/l)")
-            summarySheet.write(start, 10, "Siarczany (mg SO4/l)")
-            summarySheet.write(start, 11, "Chlorki (mg Cl/l)")
-            summarySheet.write(start, 12, "Wapń (mg Ca/l)")
-            summarySheet.write(start, 13, "Magnez (mg Mg/l)")
-            summarySheet.write(start, 14, "Twardość ogólna (mg CaCO3/l)")
-            summarySheet.write(start, 15, "Odczyn pH")
-            summarySheet.write(start, 16, "Zasadowość ogółna (mg CaCO3/l)")
-            summarySheet.write(start, 17, "Azot amonowy (mg N-NH4/l)")
-            summarySheet.write(start, 18, "Azot Kjeldahla (mg N/l)")
-            summarySheet.write(start, 19, "Azot azotanowy (mg N-NO3/l)")
-            summarySheet.write(start, 20, "Azot ogólny (mg N/l)")
-            summarySheet.write(start, 21, "Fosforany  (mg PO4/l)")
-            summarySheet.write(start, 22, "Fosfor ogólny (mg P/l)")
+            summarySheet.write(0, 0, "Nazwa ppk")
+            summarySheet.write(0, 1, "Stat")
+            summarySheet.write(0, 2, "Temperatura (oC)")
+            summarySheet.write(0, 3, "Barwa (mg/l Pt)")
+            summarySheet.write(0, 4, "Zawiesina ogólna(mg / l)")
+            summarySheet.write(0, 5, "Tlen rozpuszczony (mg O2/l)")
+            summarySheet.write(0, 6, "BZT5 (mg O2/l)")
+            summarySheet.write(0, 7, "OWO (mg C/l)")
+            summarySheet.write(0, 8, "Przewodność w 20oC (uS/cm)")
+            summarySheet.write(0, 9, "Substancje rozpuszczone (mg/l)")
+            summarySheet.write(0, 10, "Siarczany (mg SO4/l)")
+            summarySheet.write(0, 11, "Chlorki (mg Cl/l)")
+            summarySheet.write(0, 12, "Wapń (mg Ca/l)")
+            summarySheet.write(0, 13, "Magnez (mg Mg/l)")
+            summarySheet.write(0, 14, "Twardość ogólna (mg CaCO3/l)")
+            summarySheet.write(0, 15, "Odczyn pH")
+            summarySheet.write(0, 16, "Zasadowość ogółna (mg CaCO3/l)")
+            summarySheet.write(0, 17, "Azot amonowy (mg N-NH4/l)")
+            summarySheet.write(0, 18, "Azot Kjeldahla (mg N/l)")
+            summarySheet.write(0, 19, "Azot azotanowy (mg N-NO3/l)")
+            summarySheet.write(0, 20, "Azot ogólny (mg N/l)")
+            summarySheet.write(0, 21, "Fosforany  (mg PO4/l)")
+            summarySheet.write(0, 22, "Fosfor ogólny (mg P/l)")
             currentRow = 1
 
 # w danych wyznaczamy komórki do spisania i przepisujemy je do pliku wyjściowego
@@ -89,5 +90,5 @@ for filename in os.listdir(dirname):
                 print ("Skipping: " + str(sheet.cell(i, 0).value) + " (" + str(sheet.cell(i, 0).ctype) + ")")
 
 #zapisujemy zmiany do pliku wyjściowego
-summaryWorkbook.save(os.getcwd() + "\\summary2011-14.xls")
+summaryWorkbook.save(tkinter.filedialog.asksaveasfilename(defaultextension='.xls'))
 print ("Finished")
